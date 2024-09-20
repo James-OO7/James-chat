@@ -14,7 +14,10 @@ const io = socketIo(server, {
 
 const PORT = process.env.PORT || 3001;
 
-app.use(cors());
+app.use(cors({
+    origin: 'https://message-app-ochre.vercel.app/',
+    methods: ['GET', 'POST']
+}));
 
 io.on('connection', (socket) => {
   console.log('A user connected');
