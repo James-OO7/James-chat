@@ -5,19 +5,23 @@ const cors = require('cors');
 
 const app = express();
 const server = http.createServer(app);
+
 const io = socketIo(server, {
   cors: {
-    origin: 'http://localhost:3000',
+    origin: 'https://message-app-ochre.vercel.app', 
     methods: ['GET', 'POST'],
-  },
+    credentials: true 
+  }
 });
 
-const PORT = process.env.PORT || 3001;
-
 app.use(cors({
-    origin: 'https://message-app-ochre.vercel.app/',
-    methods: ['GET', 'POST']
+  origin: 'https://message-app-ochre.vercel.app', 
+  methods: ['GET', 'POST'],
+  credentials: true
 }));
+
+
+const PORT = process.env.PORT || 3001;
 
 io.on('connection', (socket) => {
   console.log('A user connected');
