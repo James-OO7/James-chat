@@ -20,17 +20,20 @@ app.use(cors({
   credentials: true
 }));
 
-
 const PORT = process.env.PORT || 3001;
 
-io.on('connection', (socket) => {
-  console.log('A user connected');
+const chatHistory = [];
 
-  // Listen for 'chatMessage' and broadcast the user + message
-  socket.on('chatMessage', (data) => {
-    console.log(`${data.user}: ${data.text}`); // Log with username for debugging
-    io.emit('chatMessage', { user: data.user, text: data.text }); // Broadcast message with username
-  });
+io.on('connection', (socket) => {
+    console.log('A user connected');
+    socket.emit('chatHistory', chatHistory);
+  
+    socket.on('chatMessage', (data) => {
+      const messageData = { user: data.user, text: data.text, timestamp: new Date().toISOString() };
+      chatHistory.push(messageData);
+  
+      io.emit('chatMessage', messageData);
+    });
 
   socket.on('disconnect', () => {
     console.log('A user disconnected');
